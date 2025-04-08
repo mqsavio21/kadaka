@@ -7,6 +7,7 @@ const router = useRouter()
 const showContent = ref(false)
 const activeCategory = ref('food')
 const slidePositions = ref({}) // Track slide position for each category
+const isMobileMenuOpen = ref(false)
 
 const categories = [
   { id: 'food', name: 'Food' },
@@ -326,6 +327,10 @@ const getVisibleItems = (items, subcategory) => {
 const handleLoadingComplete = () => {
   showContent.value = true
 }
+
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
 </script>
 
 <template>
@@ -341,15 +346,53 @@ const handleLoadingComplete = () => {
               <div class="flex-shrink-0">
                 <img src="/images/kadakalogo.png" alt="KOPI NIKMAT" class="h-10 sm:h-14 w-auto" />
               </div>
-              <div class="flex items-center space-x-4 sm:space-x-8">
-                <div class="hidden sm:flex items-center text-[#8b7355] mr-4">
+              <!-- Desktop Menu -->
+              <div class="hidden sm:flex items-center space-x-4 sm:space-x-8">
+                <div class="flex items-center text-[#8b7355] mr-4">
                   <i class="far fa-clock mr-2"></i>
                   <span>Open 8am - 10pm</span>
                 </div>
                 <button @click="goToHome" class="text-[#d4a574] hover:text-[#e8c5a3] font-medium text-base sm:text-lg">HOME</button>
                 <button @click="goToMenu" class="text-[#d4a574] hover:text-[#e8c5a3] font-medium text-base sm:text-lg">MENU</button>
               </div>
+              <!-- Mobile Menu Button -->
+              <div class="sm:hidden">
+                <button 
+                  @click="toggleMobileMenu"
+                  class="text-[#d4a574] hover:text-[#e8c5a3] p-2"
+                >
+                  <i class="fas fa-bars text-2xl"></i>
+                </button>
+              </div>
             </div>
+            <!-- Mobile Menu Dropdown -->
+            <Transition
+              enter-active-class="transition duration-200 ease-out"
+              enter-from-class="transform -translate-y-4 opacity-0"
+              enter-to-class="transform translate-y-0 opacity-100"
+              leave-active-class="transition duration-150 ease-in"
+              leave-from-class="transform translate-y-0 opacity-100"
+              leave-to-class="transform -translate-y-4 opacity-0"
+            >
+              <div v-show="isMobileMenuOpen" class="sm:hidden py-2 space-y-2">
+                <div class="flex items-center text-[#8b7355] px-4 py-2">
+                  <i class="far fa-clock mr-2"></i>
+                  <span>Open 8am - 10pm</span>
+                </div>
+                <button 
+                  @click="goToHome" 
+                  class="block w-full text-left px-4 py-2 text-[#d4a574] hover:bg-[#3d2f25] transition-colors duration-200"
+                >
+                  HOME
+                </button>
+                <button 
+                  @click="goToMenu" 
+                  class="block w-full text-left px-4 py-2 text-[#d4a574] hover:bg-[#3d2f25] transition-colors duration-200"
+                >
+                  MENU
+                </button>
+              </div>
+            </Transition>
           </div>
         </nav>
 
